@@ -12,6 +12,10 @@
     <header>
         <h1>TIMER</h1>
     </header>
+    <div class="modechanger">
+        <input type="button" value="UP" id="up">
+        <input type="button" value="DOWN" id="down">
+    </div>
     <div class="container">
         <div class="clocks">
             <div class="buttons">
@@ -28,14 +32,21 @@
             <input type="button" value="clock update" id="update">
         </p>
     </div>
+    <footer>
+        @bogyeong
+    </footer>
 
 </body>
 
 
 <script>
+    var upBtn = document.querySelector('#up');
+    var downBtn = document.querySelector('#down');
+
     var startBtn = document.querySelector('#start');
     var stopBtn = document.querySelector('#stop');
     var resetBtn = document.querySelector('#reset');
+
     var clock = document.querySelector('.mainClock');
 
     var text = document.querySelector('#text');
@@ -84,28 +95,45 @@
     function displayTime(start) {
         let datenow = new Date();
         let nowtime = datenow.getTime();
-        clock.textContent = changeFormat(savedtime + Math.floor((nowtime - start) / 1000));
+        let changed = 0;
+        if(downBtn.style.backgroundColor=='white') {
+            changed = savedtime - Math.floor((nowtime - start) / 1000);
+            if(changed <= 0) {
+                clearInterval(presentClock);
+                startBtn.disabled = false;
+                changed = 0;
+                savedtime = 0;
+                clock.style.color = 'red';
+            }
+        }
+        else {
+            changed = savedtime + Math.floor((nowtime - start) / 1000);
+        }
+        clock.textContent = changeFormat(changed);
     }
 
     // const createClock = setInterval(displayTime, 1000);
     startBtn.onclick = function () {
         startBtn.disabled = "disabled";
         let starttime = setStarttime();
+        clock.style.color = 'black';
         presentClock = setInterval(displayTime, 1000, starttime);
     };
 
     stopBtn.onclick = function () {
         startBtn.disabled = false;
         clearInterval(presentClock);
-        savedtime = parseInt(clock.textContent);
-    }
+        let parsedTimeArray = clock.textContent.toString().split(":");
+        savedtime = parseInt(parsedTimeArray[0])*3600 + parseInt(parsedTimeArray[1])*60 + parseInt(parsedTimeArray[2]);
+    };
 
     resetBtn.onclick = function () {
         startBtn.disabled = false;
         clearInterval(presentClock);
         savedtime = 0;
         clock.textContent = "00:00:00";
-    }
+        clock.style.color = 'black';
+    };
 
     updateBtn.onclick = function () {
         if (text.value.length == 0 || isNaN(text.value) || parseInt(text.value) < 0) {
@@ -115,7 +143,18 @@
             savedtime = parseInt(text.value);
             clock.textContent = changeFormat(savedtime);
         }
-    }
+    };
+
+    upBtn.onclick = function () {
+        upBtn.style.backgroundColor = 'white';
+        downBtn.style.backgroundColor = 'tomato';
+    };
+
+    downBtn.onclick = function () {
+        upBtn.style.backgroundColor = 'tomato';
+        downBtn.style.backgroundColor = 'white';
+    };
+
 </script>
 
 </html>
