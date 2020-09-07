@@ -1,0 +1,45 @@
+body {
+    background-color: tomato;
+}
+
+input[type=button] {
+    background-color: powderblue;
+    border: 1px solid black;
+    border-style: outset;
+}
+
+.buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.buttons > input[type=button] {
+    flex: 1;
+    padding: 2px 8px;
+    font-size: 1rem;
+    margin: 0px 5px;
+}
+
+
+.container {
+    padding: 20px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.mainClock {
+    text-align: center;
+    font-size: 2rem;
+}
+
+h1 {
+    text-align: center; 
+    color: white;
+}
+
+p {
+    font-family: sans-serif;
+}

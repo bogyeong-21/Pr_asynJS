@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Stopwatch using setInterval</title>
+    <link rel="stylesheet" href="clock.css">
+    <!-- <script src="clock.js"></script> -->
+</head>
+
+<body>
+    <header>
+        <h1>TIMER</h1>
+    </header>
+    <div class="container">
+        <div class="clocks">
+            <div class="buttons">
+                <input type="button" value="start" id="start">
+                <input type="button" value="stop" id="stop">
+                <input type="button" value="reset" id="reset">
+            </div>
+            <p class="mainClock"></p>
+        </div>
+
+        <p class="setTimer">
+            <span>write start time(sec)</span>
+            <input type="text" id="text">
+            <input type="button" value="clock update" id="update">
+        </p>
+    </div>
+
+</body>
+
+
+<script>
+    var startBtn = document.querySelector('#start');
+    var stopBtn = document.querySelector('#stop');
+    var resetBtn = document.querySelector('#reset');
+    var clock = document.querySelector('.mainClock');
+
+    var text = document.querySelector('#text');
+    var updateBtn = document.querySelector('#update');
+
+    let presentClock;
+    let savedtime = 0;
+
+    clock.textContent = "00:00:00";
+
+    function setStarttime() {
+        let date = new Date();
+        let time = date.getTime();
+        return time;
+    }
+
+    function changeFormat(timeSec) {
+        let hr = 0;
+        let min = 0;
+        let sec = 0;
+        if (timeSec >= 3600) {
+            hr = Math.floor(timeSec / 3600);
+            min = Math.floor((timeSec - hr * 3600) / 60);
+            sec = timeSec - hr * 3600 - min * 60;
+        }
+        else if (timeSec >= 60) {
+            min = Math.floor(timeSec / 60);
+            sec = timeSec - min * 60;
+        }
+        else {
+            sec = timeSec;
+        }
+
+        if (hr < 10) hr = "0" + hr.toString();
+        else hr = hr.toString();
+
+        if (min < 10) min = "0" + min.toString();
+        else min = min.toString();
+
+        if (sec < 10) sec = "0" + sec.toString();
+        else sec = sec.toString();
+
+        return hr + ":" + min + ":" + sec;
+    }
+
+    function displayTime(start) {
+        let datenow = new Date();
+        let nowtime = datenow.getTime();
+        clock.textContent = changeFormat(savedtime + Math.floor((nowtime - start) / 1000));
+    }
+
+    // const createClock = setInterval(displayTime, 1000);
+    startBtn.onclick = function () {
+        let starttime = setStarttime();
+        presentClock = setInterval(displayTime, 1000, starttime);
+    };
+
+    stopBtn.onclick = function () {
+        clearInterval(presentClock);
+        savedtime = parseInt(clock.textContent);
+    }
+
+    resetBtn.onclick = function () {
+        clearInterval(presentClock);
+        savedtime = 0;
+        clock.textContent = "00:00:00";
+    }
+
+    updateBtn.onclick = function () {
+        if (text.value.length == 0 || isNaN(text.value) || parseInt(text.value) < 0) {
+            alert("start time needs to be Positive Integer");
+        }
+        else {
+            savedtime = parseInt(text.value);
+            clock.textContent = changeFormat(savedtime);
+        }
+    }
+</script>
+
+</html>
