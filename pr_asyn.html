@@ -89,16 +89,19 @@
 
     // const createClock = setInterval(displayTime, 1000);
     startBtn.onclick = function () {
+        startBtn.disabled = "disabled";
         let starttime = setStarttime();
         presentClock = setInterval(displayTime, 1000, starttime);
     };
 
     stopBtn.onclick = function () {
+        startBtn.disabled = false;
         clearInterval(presentClock);
         savedtime = parseInt(clock.textContent);
     }
 
     resetBtn.onclick = function () {
+        startBtn.disabled = false;
         clearInterval(presentClock);
         savedtime = 0;
         clock.textContent = "00:00:00";
